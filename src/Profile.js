@@ -1,7 +1,7 @@
 import React from 'react';
 
-function Profile({ user }) {
-  const { email, password, name } = user || {};
+function Profile(props) {
+  const { email, password, name } = props.user || {};
   return (
     <>
       <h1>Profile</h1>

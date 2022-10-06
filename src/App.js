@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link, Route, Switch, BrowserRouter as Router } from 'react-router-dom';
-
+import { Link, Route, Routes, useNavigate } from 'react-router-dom';
+import './App.css';
 import { signIn } from './auth';
-import AuthRoute from './AuthRoute';
 
 import Home from './Home';
 import Profile from './Profile';
@@ -13,12 +12,12 @@ import LogoutButton from './LogoutButton';
 function App() {
   const [user, setUser] = useState(null);
   const authenticated = user != null;
-
+  const navigate = useNavigate();
   const login = ({ email, password }) => setUser(signIn({ email, password }));
   const logout = () => setUser(null);
 
   return (
-    <Router>
+    <div className='App'>
       <header>
         <Link to="/">
           <button>Home</button>
@@ -36,23 +35,15 @@ function App() {
       </header>
       <hr />
       <main>
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route
-            path="/login"
-            render={props => (
-              <LoginForm authenticated={authenticated} login={login} {...props} />
-            )}
-          />
-          <AuthRoute
-            authenticated={authenticated}
-            path="/profile"
-            render={props => <Profile user={user} {...props} />}
-          />
-          <Route component={NotFound} />
-        </Switch>
+      <Routes>
+        <Route path="/" element={<Home/>} />
+        <Route path="/login" element={<LoginForm authenticated={authenticated} login={login} />}/>
+        <Route path = "/profile" element={ authenticated ? (<Profile user = {user} />) : (navigate('/login')) }/>
+        <Route path="*" element={<NotFound/>} />
+      </Routes>
+      
       </main>
-    </Router>
+    </div>
   );
 }
 

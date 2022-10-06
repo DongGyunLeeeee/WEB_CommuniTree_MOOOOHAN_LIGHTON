@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-function LoginForm({ authenticated, login, location }) {
+function LoginForm(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  const navigate = useNavigate();
   const handleClick = () => {
     try {
-      login({ email, password });
+      props.login({ email, password });
     } catch (e) {
       alert('Failed to login');
       setEmail('');
@@ -15,26 +15,23 @@ function LoginForm({ authenticated, login, location }) {
     }
   };
 
-  const { from } = location.state || { from: { pathname: "/" } };
-  if (authenticated) return <Redirect to={from} />;
+  if (props.authenticated) return navigate('/')
 
   return (
-    <>
+    <div>
       <h1>Login</h1>
       <input
-        value={email}
-        onChange={({ target: { value } }) => setEmail(value)}
+        onChange={e => setEmail(e.target.value)}
         type="text"
         placeholder="email"
       />
       <input
-        value={password}
-        onChange={({ target: { value } }) => setPassword(value)}
+        onChange={e => setPassword(e.target.value)}
         type="password"
         placeholder="password"
       />
       <button onClick={handleClick}>Login</button>
-    </>
+    </div>
   );
 }
 

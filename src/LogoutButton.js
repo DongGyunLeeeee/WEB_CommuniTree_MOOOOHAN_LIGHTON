@@ -1,12 +1,16 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 
-function LogoutButton({ logout, history }) {
+function LogoutButton(props) {
+  const params = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const handleClick = () => {
-    logout();
-    history.push('/');
+    props.logout();
+    navigate('/');
   }
   return <button onClick={handleClick}>Logout</button>;
 }
 
-export default withRouter(LogoutButton);
+export default LogoutButton;
